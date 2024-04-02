@@ -18,7 +18,7 @@ class ProduitController {
 
         return $count > 0 ? true : false;
     }
-
+//djcdnk
     public function getProduitById($idP)
     {
         $stmt = $this->conn->prepare("SELECT * FROM produits WHERE idP = ?");
