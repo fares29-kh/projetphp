@@ -1,16 +1,29 @@
 <?php
 include "../cnx.php";
+include "../cors.php";
 
-$username = filterRequest("username");
-$password = md5(filterRequest("password"));
+// Check if both username and password are provided
+if (!empty($_POST['username']) && !empty($_POST['password'])) {
+    $username = filterRequest("username");
+    $password = filterRequest("password");
 
-$stmt = $conn->prepare("SELECT * from  users WHERE username= ? AND pwd=  ?");
-$stmt->execute(array($username, $password));
-$count = $stmt->rowCount();
+    // Hash the password securely
+    $hashedPassword = md5($password); // Use bcrypt or Argon2 for better security
 
-if ($count > 0) {
-    echo json_encode(array("status" => "$count"));
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND pwd = ?");
+    $stmt->execute(array($username, $hashedPassword));
+
+    $count = $stmt->rowCount();
+
+    if ($count > 0) {
+        // User exists, login successful
+        echo json_encode(["status" => "success"]);
+    } else {
+        // User not found or invalid credentials
+        echo json_encode(["status" => "fail", "error" => "Invalid username or password"]);
+    }
 } else {
-    echo json_encode(array("status" => "fail"));
+    // Username or password not provided in the request
+    echo json_encode(["status" => "fail", "error" => "Username or password not provided"]);
 }
 ?>
