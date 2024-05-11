@@ -16,9 +16,9 @@ $count = $stmt->rowCount();
 
 if ($count > 0) {
     // User exists, login successful
-    echo json_encode(["status" => "success"]); 
+    echo json_encode(["status" => true ]); 
 } else {
     // User not found or invalid credentials
-    echo json_encode(["status" => "fail"]);
+    echo json_encode(["status" => false ]);
 }
 ?>
