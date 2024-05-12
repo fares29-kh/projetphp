@@ -44,12 +44,10 @@ class ProduitController {
     }
 }
 
-// Instantiate ProduitController with database connection
-$produitController = new ProduitController($conn);
 
-// Handle the request
+$produitController = new ProduitController($conn);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Extract data from POST request
+
     $nom = $_POST['nom'];
     $description = $_POST['description'];
     $prix = $_POST['prix'];
@@ -57,8 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categorie = $_POST['categorie'];
     $date_creation = $_POST['date_creation'];
     $date_modification = $_POST['date_modification'];
-
-    // Call addProduit method and handle response
     $success = $produitController->addProduit($nom, $description, $prix, $image, $categorie, $date_creation, $date_modification);
 
     if ($success) {
@@ -67,13 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(array("status" => "fail"));
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Handle GET requests
+
     
-    // Check if the request is for fetching all products or a specific product by ID
+
     if (isset($_GET['idP'])) {
-        // Request is for fetching a product by its ID
+
         $idP = $_GET['idP'];
-        // Call getProduitById method and handle response
+
         $product = $produitController->getProduitById($idP);
         if ($product) {
             echo json_encode($product);
@@ -81,18 +77,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(array("error" => "Product not found"));
         }
     } else {
-        // Request is for fetching all products
+   
         $products = $produitController->fetchProduits();
         echo json_encode($products);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    // Get the PUT request body
+
     $putData = file_get_contents("php://input");
 
-    // Decode the JSON data
+
     $jsonData = json_decode($putData, true);
 
-    // Check if 'idP' is present in the JSON data
+
     if (isset($jsonData['idP'])) {
         $idP = $jsonData['idP'];
         $nom = $jsonData['nom'];
@@ -103,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $date_creation = $jsonData['date_creation'];
         $date_modification = $jsonData['date_modification'];
 
-        // Call updateProduit method and handle response
+
         $success = $produitController->updateProduit($idP, $nom, $description, $prix, $image, $categorie, $date_creation, $date_modification);
 
         if ($success) {
@@ -115,11 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(array("error" => "'idP' parameter is missing"));
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    // Extract product ID from URL
+
     $urlParts = explode('/', $_SERVER['REQUEST_URI']);
     $idP = end($urlParts);
 
-    // Call deleteProduit method and handle response
     $success = $produitController->deleteProduit($idP);
 
     if ($success) {

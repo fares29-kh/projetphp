@@ -1,7 +1,6 @@
 <?php
-
 // categorieController.php
-include "../cors.php"; // Make sure you handle CORS properly for security
+include "../cors.php"; 
 include_once "../cnx.php";
 
 class CategorieController {
@@ -14,10 +13,10 @@ class CategorieController {
     public function addCategorie($nomC, $descriptionC, $date_creation, $date_modification) {
         try {
             $stmt = $this->conn->prepare("INSERT INTO categorie (nomC, descriptionC, date_creation, date_modification) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$nomC, $descriptionC, $date_creation, $date_modification]); // Use an array for execute() for better readability and security
+            $stmt->execute([$nomC, $descriptionC, $date_creation, $date_modification]); 
             return $stmt->rowCount() > 0;
         } catch (PDOException $e) {
-            // Log or handle the exception appropriately
+         
             error_log("Error adding category: " . $e->getMessage());
             return false;
         }
@@ -29,7 +28,7 @@ class CategorieController {
             $stmt->execute([$idC]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Log or handle the exception appropriately
+            
             error_log("Error fetching category by ID: " . $e->getMessage());
             return null;
         }
@@ -40,7 +39,7 @@ class CategorieController {
             $stmt = $this->conn->query("SELECT * FROM categorie");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Log or handle the exception appropriately
+
             error_log("Error fetching categories: " . $e->getMessage());
             return [];
         }
